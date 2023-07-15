@@ -4,11 +4,13 @@ import Connectdb from "./dbconnection/index.js"
 import express from 'express'
 import router from "./router/index.js"
 import bodyParser from "body-parser"
+import cors from 'cors'
 
 const app=express()
-const port=process.env.PORT||5080
+const port=5080
 app.use(express.json())
-// app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(cors())
 app.use(router)
 
 

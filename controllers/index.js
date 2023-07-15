@@ -42,7 +42,7 @@ export const Register=async(req,res)=>{
         res.send("user registered successfully")
        }
        else{
-        res.send({message:"user already exists"})
+        res.status(403).json({message:"user already exists"})
        }
     }
     catch(e){
