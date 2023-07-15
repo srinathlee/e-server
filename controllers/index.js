@@ -39,7 +39,7 @@ export const Register=async(req,res)=>{
         const newuser={name,email,password:hasedpassword,profile,primeuser}
         const modleduser= new models.NewModel(newuser)
         const result=await modleduser.save()
-        res.send("user registered successfully")
+        res.status(200).send("user registered successfully")
        }
        else{
         res.status(403).json({message:"user already exists"})

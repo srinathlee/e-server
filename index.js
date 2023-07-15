@@ -7,7 +7,7 @@ import bodyParser from "body-parser"
 import cors from 'cors'
 
 const app=express()
-const port=5080
+const port=process.env.PORT||5080
 app.use(express.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(cors())
