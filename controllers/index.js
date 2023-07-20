@@ -18,12 +18,10 @@ export const AuthorizeUser=async(req,res,next)=>{
         }
         else{
            const payload=await jwt.verify(jwt_token,process.env.jwtSecreatToken)
-           console.log(payload)
            req.primeuser=payload.primeuser
            next()
         }
-     }
-
+      }
      catch(e){
       res.status(400).send({error:e})
      }
@@ -31,7 +29,6 @@ export const AuthorizeUser=async(req,res,next)=>{
 
 export const Register=async(req,res)=>{
     const {name,email,password,profile,primeuser}=req.body
-    
     try{
        const user=await models.NewModel.findOne({email})
        if(user==null){
@@ -39,10 +36,10 @@ export const Register=async(req,res)=>{
         const newuser={name,email,password:hasedpassword,profile,primeuser}
         const modleduser= new models.NewModel(newuser)
         const result=await modleduser.save()
-        res.status(200).send("user registered successfully")
+        res.status(200).send({message:"user registered successfully"})
        }
        else{
-        res.status(403).json({message:"user already exists"})
+        res.status(403).send({error:"user already exists"})
        }
     }
     catch(e){
@@ -55,14 +52,17 @@ export const Login=async(req,res)=>{
     try{
    const {email,password}=req.body 
    const user=await models.NewModel.findOne({"email":email})
+
    if(user!=null){
     const checkPassword=await bcrypt.compare(password,user.password)
     if(checkPassword){
         const payload={email,primeuser:user.primeuser}
+
         const json_token=jwt.sign(payload,process.env.jwtSecreatToken,{expiresIn:'24h'})
         res.status(200).send({jwt_token:json_token,message:"login successful"})
       }
     else{
+      
         res.status(401).send({error:"password wrong"})
     }
    }
@@ -84,7 +84,6 @@ export const Products=async(req,res)=>{
     const price=params.price||0
     const rating=params.rating||0 
     const title=params.title||""
-
     if(primeuser){
       const primedata=await models.PrimeProductModel.find()
       data.primedata=primedata
