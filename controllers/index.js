@@ -98,3 +98,32 @@ export const Products=async(req,res)=>{
   
 } 
 
+export const getProduct=async(req,res)=>{
+  const {id}=req.params
+  try{
+    console.log(id)
+    const product=await models.ProductModel.find({id})
+    if(product.length==0){
+      return res.status(301).send({"message":"no product found"})
+    }
+   return res.status(200).send({"data":product})
+  }
+  catch(e){
+    return res.status(403).send({"error":e})
+  }
+}
+
+export const getUser=async(req,res)=>{
+  const {email}=req.query 
+
+  try{
+    const response=await models.NewModel.findOne({email})
+    res.status(201).send(response)
+  }
+  catch(e){
+    console.log(e)
+    res.send({error:"got profile error"})  
+  }
+
+  
+}
